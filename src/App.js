@@ -1,25 +1,63 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState,useEffect } from 'react';
+import Title from './comps/Title';
+import UploadForm from './comps/UploadForm';
+import ImageGrid from './comps/ImageGrid';
+import Modal from './comps/Modal';
+import {SignIn,SignUp} from './comps/Auth'
+import {  Route, Switch } from 'react-router-dom';
+import {auth} from "./firebase/config";
+import {useHistory} from 'react-router-dom'
 
-function App() {
+function Home(){
+  const [selectedImg, setSelectedImg] = useState(null);
+  console.log(selectedImg)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Title/>
+      <UploadForm />
+      <ImageGrid setSelectedImg={setSelectedImg} />
+      { selectedImg && (
+        <Modal selectedImg={selectedImg} setSelectedImg={setSelectedImg} />
+      )}
     </div>
   );
+}
+
+function App() {
+  const history = useHistory()
+    
+  useEffect(()=>{
+    auth.onAuthStateChanged((user)=>{
+      if(user){
+          
+          history.push('/')
+      }
+      else
+      history.push('/signin')
+
+    }
+      )
+      
+  }
+    //console.log(user)
+  ,[])
+
+  return(
+    <main>
+    <Switch>
+        <Route path="/" component={Home} exact />
+        <Route path='/signin' >
+          < SignIn/>
+        </Route>
+        <Route path='/signup' >
+          < SignUp/>
+        </Route>
+    </Switch>
+</main>
+
+  );
+  
+  
 }
 
 export default App;
