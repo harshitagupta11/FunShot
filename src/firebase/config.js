@@ -20,6 +20,4 @@ const projectFirestore = firebase.firestore();
 const timestamp = firebase.firestore.FieldValue.serverTimestamp;
 
 export { projectStorage, projectFirestore, timestamp,auth };
-// 18601207777
-// 4748 4681 5653 5005
-// 743108074
+
